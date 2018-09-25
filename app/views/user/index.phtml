@@ -1,0 +1,329 @@
+
+<p class="container" id="output"  style="color:white;"><?php $this->flashSession->output() ?></p> 
+<div class="col-lg-3 text-center">
+
+    <h1 class="my-4" style="font-size:30px;"> <img height="120px" src="<?= $this->url->getBaseUri(); ?>public/img/book.png"></h1> 
+
+    <div class="list-group">
+        <form action="" method="">
+            <input type="text" size="25px" placeholder="Nom du livre recherché..."id='search' class="form-control" required />
+
+        </form>
+    </div>
+    <br/>
+
+
+</div>
+<!-- /.col-lg-3 --> 
+
+<div class="col-lg-8">
+
+
+
+    <h3 class="card-title">Mes livres empruntés</h3>  <hr/>     
+    <div class="col-lg-9">
+        <div class="col-md-6 mb-4">
+            <h6><b>Chercher par Catégorie: </b></h6><select name="categorie" id="categorie" class="form-control">
+                <?php foreach ($cat as $value): ?>
+                    <option value="<?= $value->getIdCat() ?>"> <?= $value->getLibCat() ?> </option>
+                <?php endforeach; ?>
+
+            </select> <br/>
+        </div>
+    </div>
+    <div class="row" id="pub">
+        <?= $pret ?>
+    </div>
+    <p id="loadpub"></p>
+
+    <hr/>
+    <button type="button" id="pubload" class="btn btn-info">
+        <i class="fa fa-1x fa-eye"></i> Voir plus
+    </button>
+
+    <hr/>
+</div>
+<script>
+    $(function () {
+
+        $('#pub').on('click', '.emprunt', function () {
+
+            var IdLi = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("livre/emprunt") ?>?IdLi=" + IdLi,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("span.emprunt" + IdLi).html(data);
+                }
+
+
+            });
+
+
+        });
+
+        $('#pub').on('click', '.favoris', function () {
+
+            var IdLi = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("livre/favoris") ?>?IdLi=" + IdLi,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("button#favoris" + IdLi).html(data);
+                }
+
+
+            });
+        });
+        $('#categorie').on('change', function () {
+            $("#loader_1").removeClass("hide");
+            var pourc = encodeURIComponent($(this).val());
+            $.ajax({
+                url: "<?= $this->url->get("user/searchcatlivre") ?>?pourc=" + pourc,
+                type: 'GET',
+                success: function (html) {
+                    $("#loadpub").hide();
+                    $("#pubload").prop("disabled", true);
+                    $("#pub").html(html);
+                }
+            });
+        });
+
+
+        $('#pub').on('click', '.embed', function () {
+            var IdPub = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("publication/vue") ?>?IdPub=" + IdPub,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    $("span." + IdPub).html(data);
+                    $('#embed' + IdPub).gdocsViewer();
+                }
+
+
+            });
+
+
+        });
+
+        $('#pub').on('click', '.like', function () {
+
+            var IdPub = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("default/like") ?>?IdPub=" + IdPub,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("span.like" + IdPub).html(data);
+                }
+
+
+            });
+
+
+        });
+
+        $('#pub').on('click', '.likeby', function () {
+
+            var IdPub = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("default/likeby") ?>?IdPub=" + IdPub,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#likeby").html(data);
+                }
+
+
+            });
+
+
+        });
+
+        $("#search").keyup(function () {
+
+
+
+            $("#loader_1").removeClass("hide");
+            var pourc = encodeURIComponent($("#search").val());
+            $.ajax({
+                url: "<?= $this->url->get("user/searchlivre") ?>?pourc=" + pourc,
+                type: 'GET',
+                success: function (html) {
+                    $("#loadpub").hide();
+                    $("#pubload").prop("disabled", true);
+                    $("#pub").html(html);
+                }
+            });
+        });
+
+        $('#pub').on('click', '.comment', function () {
+            var IdPub = $(this).attr('id');
+
+            $("#hidden").html('<input type="hidden" name="IdPub" value="' + IdPub + '">');
+            $("#messload").attr('value', IdPub);
+            $.ajax({
+                url: "<?= $this->url->get("publication/messageload") ?>?IdPub=" + IdPub,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#loadmessage').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#loadmessage').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    $("#mess").html(data);
+                }
+
+
+            });
+
+
+        });
+
+        $('#modalmess').on('submit', '#formulaire', function (e) {
+            e.preventDefault();
+            var donne = $(this).serialize();
+            $.ajax({
+                url: "<?= $this->url->get("publication/addcomment") ?>",
+                type: "POST",
+
+                data: donne,
+                beforeSend: function () {
+                    $('#message').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                    document.getElementById("ok").disabled = -1;
+                },
+                complete: function () {
+                    $('#message').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                    document.getElementById("ok").disabled = 0;
+                },
+                success: function (html) {
+                    $('#message').html(html);
+                }
+            });
+
+        });
+
+        function getresultmessage(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {rowcount: $("#rowcountmess").val()},
+                beforeSend: function () {
+
+                    $('#loadmessage').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#loadmessage').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    $("#mess").append(data);
+                },
+                error: function () {}
+            });
+        }
+
+        $('#pub').on('click', '.embed', function () {
+            var IdPub = $(this).attr('class').split(' ').slice(-1);
+            console.log("bonjour");
+            $.ajax({
+                url: "<?= $this->url->get("user/vue") ?>?IdLi=" + IdPub,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#load').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    $("span." + IdPub).html(data);
+                    $('#embed' + IdPub).gdocsViewer();
+                }
+
+
+            });
+
+
+        });
+
+        $('#modalmess').on('click', '#messload', function () {
+
+            var IdPub = $(this).attr('value');
+            if ($(".pagenummess:last").val() <= $(".total-pagemess:last").val()) {
+
+                var pagenum = parseInt($(".pagenummess:last").val()) + 1;
+                getresultmessage('<?= $this->url->get("publication/messageload") ?>?page=' + pagenum + '&IdPub=' + IdPub);
+            }
+
+        });
+
+        function getresultpub(url) {
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: {rowcount: $("#rowcountpub").val()},
+                beforeSend: function () {
+                    console.log($("#rowcountpub").val());
+                    $('#loadpub').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(0);
+                },
+                complete: function () {
+                    $('#loadpub').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(0);
+                },
+                success: function (data) {
+                    console.log(data);
+                    $("#pub").append(data);
+                },
+                error: function () {}
+            });
+        }
+
+        $("#pubload").click(function () {
+
+            if ($(".pagenumpub:last").val() <= $(".total-pagepub:last").val()) {
+
+                var pagenum = parseInt($(".pagenumpub:last").val()) + 1;
+                console.log(pagenum);
+                getresultpub('<?= $this->url->get("user/pretload") ?>?page=' + pagenum);
+            }
+
+        });
+
+    });
+</script>

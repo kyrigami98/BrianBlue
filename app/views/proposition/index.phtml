@@ -1,0 +1,58 @@
+<div class="row">
+
+    <div class="col-lg-3 text-center">
+   <h1 class="my-4 " style="font-size:30px;"> <img height="120px" src="<?= $this->url->getBaseUri(); ?>public/img/book.png"></h1> 
+
+        
+
+    </div>
+    <!-- /.col-lg-3 -->
+            <h3><b>Répertorier un livre </b></h3><hr/>
+
+
+    <div class="col-lg-8 text-center">
+
+        <form action="index" method="post" enctype="multipart/form-data" >
+
+            <input type="text" size="25" class="form-control" name="titre" placeholder="Titre du livre..." required>
+            <br/>
+
+            <textarea type="text" size="200" class="form-control" name="description" placeholder="Resumé du livre" required></textarea>
+            <br/>
+
+            <input type="text" size="25" class="form-control" name="auteur" placeholder="Auteur..." required>
+            <br/>
+            
+            <h6><b>Catégorie: </b></h6><select name="categorie" class="form-control">
+                <?php foreach ($categories as $value): ?>
+                <option value="<?= $value->getIdCat()?>"> <?= $value->getLibCat()?> </option>
+                <?php endforeach; ?>
+                
+            </select>
+            <br/>
+
+            
+
+            <div class="col-md-6 mb-4">
+                <h6><b>Photo de couverture du livre:</b></h6>
+                <label class="nav">
+                    <i style="font-size:40px;" class=" col-sm-1 fa fa-2x fa-image"></i><input type="file" name="cover" style="display: none;"/>
+                </label>    
+            </div>  
+
+            <div class="col-md-6 mb-4">
+                <h6><b>Selectionner le livre (format TXT ou PDF ou WORD):</b></h6>
+                <label class="nav">
+                    <i style="font-size:40px;" class=" col-sm-1 fa fa-2x fa-folder-open"></i><input type="file" name="lien" style="display: none;" multiple=""/>
+                </label>   
+            </div> 
+
+            <br/>
+            <input type="submit" class="btn btn-lg btn-primary" value="Envoyer" required><br/>
+             <br/>
+            
+        </form>
+
+    </div>
+
+</div>

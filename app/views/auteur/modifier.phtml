@@ -1,0 +1,94 @@
+<div class="col-lg-8 container">
+
+    <h1>Modification</h1>
+<?php foreach ($user as $value): foreach ($auteur as $value1): ?>
+    <form  action="modifier" method="post" >
+                        <div >
+
+                            <input type="email" size="25" class="form-control" name="email" value="<?=$value->getMail()?>" required>
+                            <br/>
+                            <input type="text" size="25" class="form-control" name="nom" value="<?=$value->getNom() ?>" required>
+                            <br/>
+                            <input type="text" size="25" class="form-control" name="prenom" value="<?=$value->getPrenom() ?>" required>
+                            <br/>
+                            <input type="date" size="25" class="form-control" name="DateNaiss" value="<?= date("T",$value->getDateNaiss())?> "required>
+                            <br/> 
+                            <textarea type="" size="25" id="description" class="form-control" name="bibiographie" ><?=$value1->getBibiographie() ?></textarea>
+                            <br/>
+                            <input type="password" id="pass" size="25" class="form-control" name="password" placeholder="Mot de passe..." required>
+                            <br/>
+                            <br/>
+                            <input type="password"  id="confirm" size="25" class="form-control" name="cpassword" placeholder="Confirmer mot de passe..." required>
+                            <br/>
+                            
+                            <p class="" style="" id="passw"></p>
+                        </div>
+                        <div >
+                            <button type="submit" class="btn btn-primary" id="but">Modifier</button>
+                        </div>
+                    </form>
+    <p class="" style="" id="passw"></p>
+<?php endforeach; endforeach; ?>
+
+</div>
+ <script>
+$(function () {
+    $("#pass").keyup(function () {
+
+
+        if ($("#pass").val().length >= 8) {
+
+            var cherch = encodeURIComponent($("#pass").val());
+
+
+
+            $.ajax({
+                url: "<?= $this->url->get("default/controlpass") ?>?pass=" + cherch,
+                type: 'GET',
+                beforeSend: function () {
+                    $('#passw').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeOut(300);
+                    document.getElementById("but").disabled = -1;
+                },
+                complete: function () {
+                    $('#passw').html(' <i class="now-ui-icons loader_refresh spin" style=" font-size: 20px; " width="200px"></i> ').fadeIn(300);
+                    document.getElementById("but").disabled = 0;
+                },
+                success: function (html) {
+
+
+                    $('#passw').html(html).fadeIn(500);
+
+                }
+            });
+
+        } else {
+
+            $('#passw').html("8 caractères minimum").show();
+            document.getElementById("but").disabled = -1;
+        }
+
+
+
+    });
+
+    $("#confirm").keyup(function () {
+        var cherch = encodeURIComponent($("#pass").val());
+        var confirm = encodeURIComponent($("#confirm").val());
+
+        $.ajax({
+            url: "<?= $this->url->get("default/controlpass") ?>?pass=" + cherch + "&&confirm=" + confirm,
+            type: 'GET',
+            success: function (html) {
+
+
+                $('#passw').html(html).fadeIn(500);
+
+            }
+        });
+    });
+
+
+
+});
+
+        </script>

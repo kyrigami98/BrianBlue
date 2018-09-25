@@ -1,0 +1,15 @@
+<div class="container jumbotron text-center">
+    <div class="col-lg-5 container text-center">
+        <p class="container" id="output"  style="color:white;"><?php $this->flashSession->output() ?></p> 
+        <form method="post" action="<?= $this->url->get("admin/index") ?>">
+        <h4><b>Espace Administrateur</b></h4>
+        <input type="text" size="25" class="form-control" name="pseudo" placeholder="Pseudo de l'administrateur..." required>
+        <br/> <input type="password" size="25" class="form-control" name="password" placeholder="Mot de passe" required>
+        <br/>     <input type="submit" class="btn btn-lg btn-primary" value="Envoyer" required><br/>
+        <br/>
+        </form>
+
+
+    </div>
+
+</div>
